@@ -31,6 +31,8 @@ public class Lec05Collection {
         log.info("{}", library);
 
         log.info("{}", library.getBooks(1));
+
+
     }
 
 }

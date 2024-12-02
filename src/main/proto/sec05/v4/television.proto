@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package sec05.v4;
+
+option java_multiple_files = true;
+option java_package = "com.rolands.models.sec05.v4";
+
+/*
+Requirment:
+- We NO longer need model/year! remove that!
+ */
+message Television {
+  string brand = 1;
+  // removed elements
+  // -------------
+  reserved 2;
+  reserved "year", "model";
+  // -------------
+  Type type = 3;
+}
+
+enum Type {
+  HD = 0;
+  UHD = 1;
+  OLED = 2;
+}
+
+message Car {
+  string make = 1;
+  string model = 2;
+  int32 year = 3;
+}
+
+message Address {
+  int32 postbox = 1;
+  string street = 2;
+  string city = 3;
+}
+
+message Person {
+  string name = 1;
+  int32 age = 2;
+  Car car = 3;
+  Address address = 4;
+}
+
+
