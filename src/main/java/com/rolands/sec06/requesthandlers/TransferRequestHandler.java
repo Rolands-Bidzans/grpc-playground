@@ -21,12 +21,16 @@ public class TransferRequestHandler implements StreamObserver<TransferRequest> {
     @Override
     public void onNext(TransferRequest transferRequest) {
         var status = this.transfer(transferRequest);
-        var response = TransferResponse.newBuilder()
-                .setFromAccount(this.toAccountBalance(transferRequest.getFromAccount()))
-                .setToAccount(this.toAccountBalance(transferRequest.getToAccount()))
-                .build();
+        log.info("Status2: {}",status);
+        if(TransferStatus.COMPLETED.equals(status)) {
+            var response = TransferResponse.newBuilder()
+                    .setStatus(status)
+                    .setFromAccount(this.toAccountBalance(transferRequest.getFromAccount()))
+                    .setToAccount(this.toAccountBalance(transferRequest.getToAccount()))
+                    .build();
 
-        this.responseObserver.onNext(response);
+            this.responseObserver.onNext(response);
+        }
     }
 
     @Override
@@ -46,13 +50,15 @@ public class TransferRequestHandler implements StreamObserver<TransferRequest> {
         var toAccount = request.getToAccount();
         var status = TransferStatus.REJECTED;
 
-
-        if(AccountRepository.getBalance(fromAccount) >= amount && (fromAccount != toAccount)){
-            AccountRepository.deducedAmount(fromAccount, amount);
-            AccountRepository.addAmount(toAccount, amount);
-            status = TransferStatus.COMPLETED;
+        var balance = AccountRepository.getBalance(fromAccount);
+        if(balance != null){
+            if (balance >= amount && (fromAccount != toAccount)) {
+                AccountRepository.deducedAmount(fromAccount, amount);
+                AccountRepository.addAmount(toAccount, amount);
+                status = TransferStatus.COMPLETED;
+            }
         }
-
+        log.info("Statussss: {}",status);
         return  status;
     }
 

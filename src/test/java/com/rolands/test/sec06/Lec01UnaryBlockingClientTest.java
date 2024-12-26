@@ -16,14 +16,14 @@ public class Lec01UnaryBlockingClientTest extends AbstractTest{
                                                             .setAccountNumber(1)
                                                             .build();
 
-        var balance = this.blockingStub.getAccountBalance(request);
+        var balance = this.bankBlockingStub.getAccountBalance(request);
         log.info("Unary balance received: {}", balance);
         Assertions.assertEquals(10, balance.getBalance());
     }
 
     @Test
     public void getAllAccountTest(){
-        var allAccounts = this.blockingStub.getAllAccounts(Empty.getDefaultInstance());
+        var allAccounts = this.bankBlockingStub.getAllAccounts(Empty.getDefaultInstance());
         log.info("Unary all account's size: {}", allAccounts.getAccountsCount());
         Assertions.assertEquals(10, allAccounts.getAccountsCount());
     }
